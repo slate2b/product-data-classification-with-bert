@@ -1,4 +1,23 @@
+"""
+Preprocessor
+
+This script is designed to be called from a training script.
+The prepare_dataset function splits a CSV file into separate train,
+validation, and test splits using the Hugging Face Datasets library.
+
+This file can also be imported as a module and contains the following
+function:
+
+    * prepare_dataset - Splits a CSV file using the Datasets library
+
+"""
+
 from datasets import load_dataset
+
+#####
+# Adjust as desired
+#
+_train_percent = 0.7
 
 
 def prepare_dataset(source_fpath):
@@ -21,14 +40,14 @@ def prepare_dataset(source_fpath):
     )
 
     #####
-    # use train_test_split to create train, test, and validation splits
+    # use train_test_split to create train, validation, and test splits
     #
 
     # shuffle the original dataset
     original['main'] = original['main'].shuffle(seed=1)
 
     # split the shuffled dataset into a 60/40 train/test
-    dataset = original['main'].train_test_split(train_size=0.7)
+    dataset = original['main'].train_test_split(train_size=_train_percent)
 
     # create a new temporary dataset to split the test split into 2 splits
     # this will result in a train and test split here, too
