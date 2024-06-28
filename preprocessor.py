@@ -27,13 +27,9 @@ def prepare_dataset(source_fpath):
     :return:
     """
 
-    file_dict = {
-        "main": source_fpath,
-    }
-
     original = load_dataset(
         'csv',
-        data_files=file_dict,
+        data_files=source_fpath,
         delimiter=',',
         column_names=['text', 'label'],
         skiprows=1
@@ -44,10 +40,10 @@ def prepare_dataset(source_fpath):
     #
 
     # shuffle the original dataset
-    original['main'] = original['main'].shuffle(seed=1)
+    original = original.shuffle(seed=1)
 
     # split the shuffled dataset into a 60/40 train/test
-    dataset = original['main'].train_test_split(train_size=_train_percent)
+    dataset = original['train'].train_test_split(train_size=_train_percent)
 
     # create a new temporary dataset to split the test split into 2 splits
     # this will result in a train and test split here, too
